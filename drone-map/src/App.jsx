@@ -240,6 +240,7 @@ function App() {
         >
           <div className="border-2 border-black p-2">
             <h6>Information</h6>
+            <p>Date: {new Date().toLocaleDateString()}</p>
             <p>Time: {currentTime.toLocaleTimeString()}</p>
             <p>Latitude: {position[0]}</p>
             <p>Longtitude: {position[1]}</p>
