@@ -1,16 +1,40 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
-});
+module.exports = function (connection) {
+  router.get("/", function (req, res, next) {
+    res.render("index", { title: "Express" });
+  });
 
-router.post("/location", function (req, res, next) {
-  const lat = req.body.lat;
-  const long = req.body.long;
+  router.get("/location", function (req, res) {
+    connection.query("SELECT * FROM location", (err, rows) => {
+      if (err) {
+        console.error("Error querying database: " + err.stack);
+        res.status(500).send("Error querying database.");
+        return;
+      }
+      res.send(rows);
+    });
+  });
 
-  res.send(`Latitude: ${lat}, Longitude: ${long}`);
-});
+  router.put("/location/:id", function (req, res, next) {
+    const id = req.params.id;
+    const lat = req.body.lat;
+    const long = req.body.long;
 
-module.exports = router;
+    connection.query(
+      "UPDATE location SET latitude = ?, longtitude = ? WHERE id = ?",
+      [lat, long, id],
+      (err, result) => {
+        if (err) {
+          console.error("Error updating location: " + err.stack);
+          res.status(500).send("Error updating location.");
+          return;
+        }
+        res.send(`Location with ID ${id} updated.`);
+      }
+    );
+  });
+
+  return router;
+};

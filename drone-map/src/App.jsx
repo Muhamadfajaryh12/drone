@@ -212,13 +212,17 @@ function App() {
       <div style={{ width: "100%", height: "30px", margin: "10px" }}>
         <h1 className="text-center font-bold text-2xl">Zephyr</h1>
       </div>
+
       <video
         autoPlay
         muted
         ref={videoRef}
-        width={640}
-        height={480}
-        style={{ position: "absolute", zIndex: "99999" }}
+        style={{
+          position: "absolute",
+          zIndex: "99999",
+          width: "640px",
+          height: "640px",
+        }}
         onPlay={() => detectVideo(videoRef.current, model, canvasRef.current)}
       />
       <canvas
